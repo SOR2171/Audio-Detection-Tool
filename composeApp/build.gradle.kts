@@ -56,8 +56,10 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
+            // https://github.com/dosier/kodio
             implementation(libs.kodio.core)
-            implementation(libs.kymatik)
+            // https://kotlin.github.io/multik/
+            implementation(libs.multik.kotlin)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
