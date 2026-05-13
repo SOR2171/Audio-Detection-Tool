@@ -55,6 +55,7 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.material.icons.extended)
 
             // https://github.com/dosier/kodio
             implementation(libs.kodio.core)
