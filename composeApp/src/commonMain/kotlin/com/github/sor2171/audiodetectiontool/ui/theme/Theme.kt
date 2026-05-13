@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import com.github.sor2171.audiodetectiontool.Platform
-import com.github.sor2171.audiodetectiontool.getPlatform
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -256,11 +255,12 @@ fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
     val colorScheme = when {
         dynamicColor -> {
-            platformData.getDynamicColorScheme(darkTheme) ?: if (darkTheme) darkScheme else lightScheme
+            platformData.getDynamicColorScheme(darkTheme)
+                ?: if (darkTheme) darkScheme else lightScheme
         }
 
         darkTheme -> darkScheme
