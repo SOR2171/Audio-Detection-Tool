@@ -61,6 +61,8 @@ kotlin {
             implementation(libs.kodio.core)
             // https://kotlin.github.io/multik/
             implementation(libs.multik.kotlin)
+            implementation(libs.slf4j.api)
+            implementation(libs.slf4j.simple)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
