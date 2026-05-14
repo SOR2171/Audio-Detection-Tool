@@ -1,8 +1,29 @@
 # Audio Detection Tool
 
+([简体中文](./README-CN.md) / English)
+
 ## Overview
 
-This application aims to detect audio input from the user and provide feedback on pitch and other details.
+This application aims to detect audio input from the user
+and provide analysis on pitch and other details.
+
+|   platform    |                    view                    |     note      |
+|:-------------:|:------------------------------------------:|:-------------:|
+| JVM (Desktop) |     ![JVM View](./assets/jvm_view.png)     | full features |
+|    Android    | ![Android View](./assets/android_view.png) | full features |
+|      iOS      |     ![iOS View](./assets/ios_view.png)     |  not tested   |
+|     WASM      |    ![WASM View](./assets/wasm_view.png)    |  not tested   |
+|      Web      |     ![Web View](./assets/web_view.png)     |   not well    |
+
+## Features
+
+- Pitch detection
+
+### future features
+
+- Spectrum
+- Audio recording
+- Audio file upload and analysis
 
 ## How to Run
 
