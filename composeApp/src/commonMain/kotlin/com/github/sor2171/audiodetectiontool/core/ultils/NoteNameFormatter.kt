@@ -7,12 +7,7 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 object NoteNameFormatter {
-    val noteNamesSharp = arrayOf("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
-    val noteNamesFlat = arrayOf("C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B")
-    val solfegeNames =
-        arrayOf("Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "La#", "Si")
-
-    fun getName(frequency: Float, base: Float, style: NoteNameStyle): NoteData {
+    fun getNoteData(frequency: Float, base: Float, style: NoteNameStyle): NoteData {
         return when (style) {
             NoteNameStyle.Scientific -> convertToScientific(frequency, base)
             NoteNameStyle.Helmholtz -> convertToHelmholtz(frequency, base)
@@ -20,6 +15,9 @@ object NoteNameFormatter {
         }
     }
 
+    fun getNoteData(frequency: Float, base: Int, style: NoteNameStyle): NoteData {
+        return getNoteData(frequency, base.toFloat(), style)
+    }
     private fun getCalculatedData(frequency: Float, base: Float): Triple<Int, Int, Int> {
         val semitonesFromA4 = 12 * log2(frequency / base)
         val midiNoteFloat = semitonesFromA4 + 69
@@ -33,12 +31,12 @@ object NoteNameFormatter {
 
     private fun convertToScientific(frequency: Float, base: Float): NoteData {
         val (noteIndex, octave, cent) = getCalculatedData(frequency, base)
-        return NoteData("${noteNamesSharp[noteIndex]}$octave", cent)
+        return NoteData("${Const.noteNamesSharp[noteIndex]}$octave", cent)
     }
 
     private fun convertToHelmholtz(frequency: Float, base: Float): NoteData {
         val (noteIndex, octave, cent) = getCalculatedData(frequency, base)
-        val noteName = noteNamesSharp[noteIndex]
+        val noteName = Const.noteNamesSharp[noteIndex]
 
         val name = when {
             octave < 3 -> {
@@ -57,6 +55,6 @@ object NoteNameFormatter {
 
     private fun convertToSolfege(frequency: Float, base: Float): NoteData {
         val (noteIndex, _, cent) = getCalculatedData(frequency, base)
-        return NoteData(solfegeNames[noteIndex], cent)
+        return NoteData(Const.solfegeNames[noteIndex], cent)
     }
 }
