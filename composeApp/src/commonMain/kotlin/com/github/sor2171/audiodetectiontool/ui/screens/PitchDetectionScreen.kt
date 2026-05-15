@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.dp
 import com.github.sor2171.audiodetectiontool.core.entity.NoteData
 import com.github.sor2171.audiodetectiontool.core.entity.NoteNameStyle
 import com.github.sor2171.audiodetectiontool.core.service.PitchDetector
-import com.github.sor2171.audiodetectiontool.core.ultils.NoteNameFormatter
-import com.github.sor2171.audiodetectiontool.core.ultils.toAudioWindows
+import com.github.sor2171.audiodetectiontool.core.utils.NoteNameFormatter
+import com.github.sor2171.audiodetectiontool.core.utils.toAudioWindows
 import com.github.sor2171.audiodetectiontool.getPlatform
 import com.github.sor2171.audiodetectiontool.ui.component.PitchTrackerDisplayCard
 import com.github.sor2171.audiodetectiontool.ui.component.RecordButtons
@@ -48,8 +48,8 @@ fun PitchTrackerScreen() {
     var noteStyle by rememberSaveable { mutableStateOf(NoteNameStyle.Scientific) }
 
     var detectedFrequency by remember { mutableStateOf(0f) }
-    val detector = remember(audioQuality, bufferSize) { 
-        PitchDetector(audioQuality.format.sampleRate, bufferSize) 
+    val detector = remember(audioQuality, bufferSize) {
+        PitchDetector(audioQuality.format.sampleRate, bufferSize)
     }
 
     LaunchedEffect(
@@ -64,7 +64,7 @@ fun PitchTrackerScreen() {
                     recorder.start()
                     recorder.liveAudioFlow
                         ?.toAudioWindows(
-                            windowSize = bufferSize, 
+                            windowSize = bufferSize,
                             hopSize = bufferSize / 2,
                             channels = audioQuality.format.channels.count
                         )

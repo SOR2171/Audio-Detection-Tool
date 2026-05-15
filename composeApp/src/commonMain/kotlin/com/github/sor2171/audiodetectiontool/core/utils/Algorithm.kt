@@ -1,4 +1,4 @@
-package com.github.sor2171.audiodetectiontool.core.ultils
+package com.github.sor2171.audiodetectiontool.core.utils
 
 import com.github.sor2171.audiodetectiontool.core.entity.WindowType
 import kotlinx.coroutines.flow.Flow

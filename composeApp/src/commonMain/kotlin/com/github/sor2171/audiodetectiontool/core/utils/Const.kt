@@ -1,4 +1,4 @@
-package com.github.sor2171.audiodetectiontool.core.ultils
+package com.github.sor2171.audiodetectiontool.core.utils
 
 import com.github.sor2171.audiodetectiontool.core.entity.NoteNameStyle
 
@@ -8,7 +8,6 @@ object Const {
         NoteNameStyle.Helmholtz to "a'",
         NoteNameStyle.Solfege to "La4"
     )
-
 
     val noteNamesSharp = arrayOf("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
     val noteNamesFlat = arrayOf("C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B")

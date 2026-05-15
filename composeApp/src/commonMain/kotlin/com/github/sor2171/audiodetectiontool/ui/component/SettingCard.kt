@@ -30,7 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.github.sor2171.audiodetectiontool.core.entity.NoteNameStyle
-import com.github.sor2171.audiodetectiontool.core.ultils.Const
+import com.github.sor2171.audiodetectiontool.core.utils.Const
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,7 +1,7 @@
 package com.github.sor2171.audiodetectiontool.core.service
 
 import com.github.sor2171.audiodetectiontool.core.entity.WindowType
-import com.github.sor2171.audiodetectiontool.core.ultils.performFFT
+import com.github.sor2171.audiodetectiontool.core.utils.performFFT
 import kotlin.math.sqrt
 
 class PitchDetector(

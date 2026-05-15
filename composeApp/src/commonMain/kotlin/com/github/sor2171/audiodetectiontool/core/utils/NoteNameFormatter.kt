@@ -1,4 +1,4 @@
-package com.github.sor2171.audiodetectiontool.core.ultils
+package com.github.sor2171.audiodetectiontool.core.utils
 
 import com.github.sor2171.audiodetectiontool.core.entity.NoteData
 import com.github.sor2171.audiodetectiontool.core.entity.NoteNameStyle
@@ -18,6 +18,7 @@ object NoteNameFormatter {
     fun getNoteData(frequency: Float, base: Int, style: NoteNameStyle): NoteData {
         return getNoteData(frequency, base.toFloat(), style)
     }
+
     private fun getCalculatedData(frequency: Float, base: Float): Triple<Int, Int, Int> {
         val semitonesFromA4 = 12 * log2(frequency / base)
         val midiNoteFloat = semitonesFromA4 + 69
