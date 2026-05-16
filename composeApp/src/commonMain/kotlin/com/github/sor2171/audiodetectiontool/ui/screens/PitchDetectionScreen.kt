@@ -41,7 +41,7 @@ import space.kodio.core.Kodio
 
 @Composable
 fun PitchTrackerScreen() {
-    var bufferSize by rememberSaveable { mutableStateOf(4096) }
+    var bufferSize by rememberSaveable { mutableStateOf(2048) }
     var audioQuality by rememberSaveable { mutableStateOf(AudioQuality.Standard) }
     var a4Frequency by rememberSaveable { mutableStateOf(440f) }
     var noteStyle by rememberSaveable { mutableStateOf(NoteNameStyle.Scientific) }
@@ -66,24 +66,23 @@ fun PitchTrackerScreen() {
                 try {
                     delay(500) // wait for the recorder to be released
                     recorder.start()
-                    recorder.liveAudioFlow
-                        ?.toAudioWindows(
-                            windowSize = bufferSize,
-                            hopSize = bufferSize / 2,
-                            channels = audioQuality.format.channels.count
-                        )
-                        ?.collect { floatWindow ->
-                            val frequency = detector.startDetection(floatWindow)
-                            withContext(Dispatchers.Main) {
-                                // stable the frequency by averaging with previous value
-                                detectedFrequency = if (frequency > 0f) {
-                                    if (detectedFrequency == 0f) frequency
-                                    else detectedFrequency * 0.5f + frequency * 0.5f
-                                } else {
-                                    0f
-                                }
+                    recorder.liveAudioFlow?.toAudioWindows(
+                        windowSize = bufferSize,
+                        hopSize = bufferSize / 2,
+                        channels = audioQuality.format.channels.count,
+                        bytesPerSample = audioQuality.format.bytesPerSample
+                    )?.collect { floatWindow ->
+                        val frequency = detector.detectPitchYIN(floatWindow)
+                        withContext(Dispatchers.Main) {
+                            // stable the frequency by averaging with previous value
+                            detectedFrequency = if (frequency > 0f) {
+                                if (detectedFrequency == 0f) frequency
+                                else detectedFrequency * 0.5f + frequency * 0.5f
+                            } else {
+                                0f
                             }
                         }
+                    }
                 } finally {
                     recorder.release()
                 }

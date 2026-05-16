@@ -136,7 +136,7 @@ fun PitchTrackerDisplayCard(
 
 @Preview
 @Composable
-fun PitchTrackerDisplayCardPreview() {
+private fun PitchTrackerDisplayCardPreview() {
     MaterialTheme {
         Column(
             modifier = Modifier.padding(24.dp)
