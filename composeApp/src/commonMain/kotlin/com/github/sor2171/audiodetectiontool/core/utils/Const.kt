@@ -13,4 +13,6 @@ object Const {
     val noteNamesFlat = arrayOf("C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B")
     val solfegeNames =
         arrayOf("Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "La#", "Si")
+
+    val bufferSizes = Array(5) { 2048 shl it }
 }

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cent">音分</string>
+    <string name="audio_quality">录音质量</string>
+    <string name="buffer_size">缓冲区大小</string>
 </resources>

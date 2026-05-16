@@ -34,18 +34,20 @@ import com.github.sor2171.audiodetectiontool.ui.component.RecordButtons
 import com.github.sor2171.audiodetectiontool.ui.component.SettingCard
 import com.github.sor2171.audiodetectiontool.ui.theme.AppTheme
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import space.kodio.core.AudioQuality
 import space.kodio.core.Kodio
 
 @Composable
 fun PitchTrackerScreen() {
-    var audioQuality by rememberSaveable { mutableStateOf(AudioQuality.Standard) }
     var bufferSize by rememberSaveable { mutableStateOf(4096) }
+    var audioQuality by rememberSaveable { mutableStateOf(AudioQuality.Standard) }
+    var a4Frequency by rememberSaveable { mutableStateOf(440f) }
+    var noteStyle by rememberSaveable { mutableStateOf(NoteNameStyle.Scientific) }
+
     var isRecording by rememberSaveable { mutableStateOf(false) }
     var isPausing by rememberSaveable { mutableStateOf(false) }
-    var a4Frequency by rememberSaveable { mutableStateOf(440) }
-    var noteStyle by rememberSaveable { mutableStateOf(NoteNameStyle.Scientific) }
 
     var detectedFrequency by remember { mutableStateOf(0f) }
     val detector = remember(audioQuality, bufferSize) {
@@ -55,12 +57,14 @@ fun PitchTrackerScreen() {
     LaunchedEffect(
         isRecording,
         isPausing,
+        audioQuality,
         bufferSize
     ) {
         if (isRecording && !isPausing) {
             withContext(Dispatchers.Default) {
                 val recorder = Kodio.recorder(quality = audioQuality)
                 try {
+                    delay(500) // wait for the recorder to be released
                     recorder.start()
                     recorder.liveAudioFlow
                         ?.toAudioWindows(
@@ -87,6 +91,38 @@ fun PitchTrackerScreen() {
         }
     }
 
+    val controlPanel = @Composable { modifier: Modifier ->
+        ControlPanel(
+            selectedBufferSize = bufferSize,
+            audioQuality = audioQuality,
+            noteStyle = noteStyle,
+            a4Frequency = a4Frequency,
+            isRecording = isRecording,
+            isPausing = isPausing,
+            onBufferSizeChange = { bufferSize = it },
+            onQualityChange = { audioQuality = it },
+            onStyleChange = { noteStyle = it },
+            onFrequencyChange = { a4Frequency = it },
+            onStartRecording = { isRecording = true },
+            onStopRecording = {
+                isRecording = false
+                isPausing = false
+                detectedFrequency = 0f
+            },
+            onPauseRecording = { isPausing = !isPausing },
+            modifier = modifier
+        )
+    }
+
+    val displayPanel = @Composable { modifier: Modifier ->
+        DisplayPanel(
+            detectedFrequency = detectedFrequency,
+            a4Frequency = a4Frequency,
+            noteStyle = noteStyle,
+            modifier = modifier
+        )
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -107,32 +143,14 @@ fun PitchTrackerScreen() {
                         modifier = Modifier.weight(0.7f).fillMaxHeight(),
                         contentAlignment = Alignment.Center
                     ) {
-                        ControlPanel(
-                            noteStyle = noteStyle,
-                            a4Frequency = a4Frequency,
-                            isRecording = isRecording,
-                            isPausing = isPausing,
-                            onStyleChange = { noteStyle = it },
-                            onFrequencyChange = { a4Frequency = it },
-                            onStartRecording = { isRecording = true },
-                            onStopRecording = {
-                                isRecording = false
-                                isPausing = false
-                                detectedFrequency = 0f
-                            },
-                            onPauseRecording = { isPausing = !isPausing }
-                        )
+                        controlPanel(Modifier)
                     }
 
                     Box(
                         modifier = Modifier.weight(1f).fillMaxHeight(),
                         contentAlignment = Alignment.Center
                     ) {
-                        DisplayPanel(
-                            detectedFrequency = detectedFrequency,
-                            a4Frequency = a4Frequency,
-                            noteStyle = noteStyle
-                        )
+                        displayPanel(Modifier)
                     }
                 }
             } else {
@@ -141,26 +159,8 @@ fun PitchTrackerScreen() {
                     verticalArrangement = Arrangement.SpaceAround,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    ControlPanel(
-                        noteStyle = noteStyle,
-                        a4Frequency = a4Frequency,
-                        isRecording = isRecording,
-                        isPausing = isPausing,
-                        onStyleChange = { noteStyle = it },
-                        onFrequencyChange = { a4Frequency = it },
-                        onStartRecording = { isRecording = true },
-                        onStopRecording = {
-                            isRecording = false
-                            isPausing = false
-                            detectedFrequency = 0f
-                        },
-                        onPauseRecording = { isPausing = !isPausing }
-                    )
-                    DisplayPanel(
-                        detectedFrequency = detectedFrequency,
-                        a4Frequency = a4Frequency,
-                        noteStyle = noteStyle
-                    )
+                    controlPanel(Modifier)
+                    displayPanel(Modifier)
                 }
             }
         }
@@ -169,12 +169,16 @@ fun PitchTrackerScreen() {
 
 @Composable
 private fun ControlPanel(
+    selectedBufferSize: Int,
+    audioQuality: AudioQuality,
     noteStyle: NoteNameStyle,
-    a4Frequency: Int,
+    a4Frequency: Float,
     isRecording: Boolean,
     isPausing: Boolean,
+    onBufferSizeChange: (Int) -> Unit,
+    onQualityChange: (AudioQuality) -> Unit,
     onStyleChange: (NoteNameStyle) -> Unit,
-    onFrequencyChange: (Int) -> Unit,
+    onFrequencyChange: (Float) -> Unit,
     onStartRecording: () -> Unit,
     onStopRecording: () -> Unit,
     onPauseRecording: () -> Unit,
@@ -186,8 +190,12 @@ private fun ControlPanel(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         SettingCard(
+            selectedBufferSize = selectedBufferSize,
             selectedStyle = noteStyle,
+            selectedQuality = audioQuality,
             a4Frequency = a4Frequency,
+            onBufferSizeChange = onBufferSizeChange,
+            onQualityChange = onQualityChange,
             onStyleChange = onStyleChange,
             onFrequencyChange = onFrequencyChange
         )
@@ -205,7 +213,7 @@ private fun ControlPanel(
 @Composable
 private fun DisplayPanel(
     detectedFrequency: Float,
-    a4Frequency: Int,
+    a4Frequency: Float,
     noteStyle: NoteNameStyle,
     modifier: Modifier = Modifier
 ) {
@@ -225,7 +233,7 @@ private fun DisplayPanel(
 
 @Preview(showBackground = true)
 @Composable
-fun PitchTrackerScreenPreview() {
+private fun PitchTrackerScreenPreview() {
     val platformData = getPlatform()
     AppTheme(platformData) {
         Surface(

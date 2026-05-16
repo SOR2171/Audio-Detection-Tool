@@ -1,3 +1,5 @@
 <resources>
     <string name="cent">cent</string>
+    <string name="audio_quality">Audio Quality</string>
+    <string name="buffer_size">Buffer Size</string>
 </resources>
