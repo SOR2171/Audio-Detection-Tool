@@ -15,7 +15,6 @@ class PitchDetector(
     private val imagBuffer = FloatArray(bufferSize)
     private val magnitudes = FloatArray(bufferSize / 2)
 
-
     private val threshold = 0.1f
     private val difference = FloatArray(bufferSize / 2)
     private val cmndf = FloatArray(bufferSize / 2)
