@@ -10,14 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,15 +38,21 @@ import space.kodio.core.AudioQuality
 import space.kodio.core.Kodio
 
 @Composable
-fun PitchTrackerScreen() {
-    var bufferSize by rememberSaveable { mutableStateOf(2048) }
-    var audioQuality by rememberSaveable { mutableStateOf(AudioQuality.Standard) }
-    var a4Frequency by rememberSaveable { mutableStateOf(440f) }
-    var noteStyle by rememberSaveable { mutableStateOf(NoteNameStyle.Scientific) }
-
-    var isRecording by rememberSaveable { mutableStateOf(false) }
-    var isPausing by rememberSaveable { mutableStateOf(false) }
-
+fun PitchTrackerScreen(
+    bufferSize: Int,
+    audioQuality: AudioQuality,
+    a4Frequency: Float,
+    noteStyle: NoteNameStyle,
+    isRecording: Boolean,
+    isPausing: Boolean,
+    onBufferSizeChange: (Int) -> Unit,
+    onQualityChange: (AudioQuality) -> Unit,
+    onStyleChange: (NoteNameStyle) -> Unit,
+    onFrequencyChange: (Float) -> Unit,
+    onStartRecording: () -> Unit,
+    onStopRecording: () -> Unit,
+    onPauseRecording: () -> Unit
+) {
     var detectedFrequency by remember { mutableStateOf(0f) }
     val detector = remember(audioQuality, bufferSize) {
         PitchDetector(audioQuality.format.sampleRate, bufferSize)
@@ -98,17 +102,16 @@ fun PitchTrackerScreen() {
             a4Frequency = a4Frequency,
             isRecording = isRecording,
             isPausing = isPausing,
-            onBufferSizeChange = { bufferSize = it },
-            onQualityChange = { audioQuality = it },
-            onStyleChange = { noteStyle = it },
-            onFrequencyChange = { a4Frequency = it },
-            onStartRecording = { isRecording = true },
+            onBufferSizeChange = onBufferSizeChange,
+            onQualityChange = onQualityChange,
+            onStyleChange = onStyleChange,
+            onFrequencyChange = onFrequencyChange,
+            onStartRecording = onStartRecording,
             onStopRecording = {
-                isRecording = false
-                isPausing = false
+                onStopRecording()
                 detectedFrequency = 0f
             },
-            onPauseRecording = { isPausing = !isPausing },
+            onPauseRecording = onPauseRecording,
             modifier = modifier
         )
     }
@@ -122,45 +125,40 @@ fun PitchTrackerScreen() {
         )
     }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) { innerPadding ->
-        BoxWithConstraints(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(24.dp)
-        ) {
-            val isLandscape = maxWidth > maxHeight
-            if (isLandscape) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier.weight(0.7f).fillMaxHeight(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        controlPanel(Modifier)
-                    }
-
-                    Box(
-                        modifier = Modifier.weight(1f).fillMaxHeight(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        displayPanel(Modifier)
-                    }
-                }
-            } else {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.SpaceAround,
-                    horizontalAlignment = Alignment.CenterHorizontally
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp)
+    ) {
+        val isLandscape = maxWidth > maxHeight
+        if (isLandscape) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier.weight(0.7f).fillMaxHeight(),
+                    contentAlignment = Alignment.Center
                 ) {
                     controlPanel(Modifier)
+                }
+
+                Box(
+                    modifier = Modifier.weight(1f).fillMaxHeight(),
+                    contentAlignment = Alignment.Center
+                ) {
                     displayPanel(Modifier)
                 }
+            }
+        } else {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceAround,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                controlPanel(Modifier)
+                displayPanel(Modifier)
             }
         }
     }
@@ -239,7 +237,21 @@ private fun PitchTrackerScreenPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            PitchTrackerScreen()
+            PitchTrackerScreen(
+                bufferSize = 2048,
+                audioQuality = AudioQuality.Standard,
+                a4Frequency = 440f,
+                noteStyle = NoteNameStyle.Scientific,
+                isRecording = false,
+                isPausing = false,
+                onBufferSizeChange = {},
+                onQualityChange = {},
+                onStyleChange = {},
+                onFrequencyChange = {},
+                onStartRecording = {},
+                onStopRecording = {},
+                onPauseRecording = {}
+            )
         }
     }
 }

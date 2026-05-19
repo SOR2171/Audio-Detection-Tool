@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">音频检测工具</string>
+
     <string name="cent">音分</string>
     <string name="audio_quality">录音质量</string>
     <string name="buffer_size">缓冲区大小</string>
+
+    <string name="pitch_detector">音高检测</string>
+    <string name="spectrum">频谱</string>
 </resources>

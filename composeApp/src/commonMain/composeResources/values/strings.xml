@@ -1,5 +1,10 @@
 <resources>
+    <string name="app_name">Audio Detection Tool</string>
+
     <string name="cent">cent</string>
     <string name="audio_quality">Audio Quality</string>
     <string name="buffer_size">Buffer Size</string>
+
+    <string name="pitch_detector">Pitch</string>
+    <string name="spectrum">Spectrum</string>
 </resources>
