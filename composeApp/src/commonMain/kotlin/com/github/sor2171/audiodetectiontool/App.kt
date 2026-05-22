@@ -41,7 +41,7 @@ import space.kodio.core.AudioQuality
 fun App() {
     val platformData = getPlatform()
 
-    var bufferSize by rememberSaveable { mutableStateOf(2048) }
+    var bufferSize by rememberSaveable { mutableStateOf(4096) }
     var audioQuality by rememberSaveable { mutableStateOf(AudioQuality.Standard) }
     var a4Frequency by rememberSaveable { mutableStateOf(440f) }
     var noteStyle by rememberSaveable { mutableStateOf(NoteNameStyle.Scientific) }

@@ -7,4 +7,6 @@
 
     <string name="pitch_detector">Pitch</string>
     <string name="spectrum">Spectrum</string>
+
+    <string name="settings">Settings</string>
 </resources>

@@ -18,10 +18,10 @@ and provide analysis on pitch and other details.
 ## Features
 
 - Pitch detection by FFT and YIN algorithms
+- Spectrum
 
 ### future features
 
-- Spectrum
 - Audio recording
 - Audio file upload and analysis
 

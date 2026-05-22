@@ -7,5 +7,7 @@
     <string name="buffer_size">缓冲区大小</string>
 
     <string name="pitch_detector">音高检测</string>
-    <string name="spectrum">频谱</string>
+    <string name="spectrum">频谱图</string>
+
+    <string name="settings">设置</string>
 </resources>

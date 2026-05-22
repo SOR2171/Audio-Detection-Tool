@@ -29,6 +29,7 @@ import com.github.sor2171.audiodetectiontool.core.utils.toAudioWindows
 import com.github.sor2171.audiodetectiontool.getPlatform
 import com.github.sor2171.audiodetectiontool.ui.component.PitchTrackerDisplayCard
 import com.github.sor2171.audiodetectiontool.ui.component.RecordButtons
+import com.github.sor2171.audiodetectiontool.ui.component.RecorderController
 import com.github.sor2171.audiodetectiontool.ui.component.SettingCard
 import com.github.sor2171.audiodetectiontool.ui.theme.AppTheme
 import kotlinx.coroutines.Dispatchers
@@ -58,41 +59,24 @@ fun PitchTrackerScreen(
         PitchDetector(audioQuality.format.sampleRate, bufferSize)
     }
 
-    LaunchedEffect(
-        isRecording,
-        isPausing,
-        audioQuality,
-        bufferSize
-    ) {
-        if (isRecording && !isPausing) {
-            withContext(Dispatchers.Default) {
-                val recorder = Kodio.recorder(quality = audioQuality)
-                try {
-                    delay(500) // wait for the recorder to be released
-                    recorder.start()
-                    recorder.liveAudioFlow?.toAudioWindows(
-                        windowSize = bufferSize,
-                        hopSize = bufferSize / 2,
-                        channels = audioQuality.format.channels.count,
-                        bytesPerSample = audioQuality.format.bytesPerSample
-                    )?.collect { floatWindow ->
-                        val frequency = detector.detectPitchYIN(floatWindow)
-                        withContext(Dispatchers.Main) {
-                            // stable the frequency by averaging with previous value
-                            detectedFrequency = if (frequency > 0f) {
-                                if (detectedFrequency == 0f) frequency
-                                else detectedFrequency * 0.5f + frequency * 0.5f
-                            } else {
-                                0f
-                            }
-                        }
-                    }
-                } finally {
-                    recorder.release()
+    RecorderController(
+        isRecording = isRecording,
+        isPausing = isPausing,
+        audioQuality = audioQuality,
+        bufferSize = bufferSize,
+        performOnWindow = { floatWindow ->
+            val frequency = detector.detectPitchYIN(floatWindow)
+            withContext(Dispatchers.Main) {
+                // stable the frequency by averaging with previous value
+                detectedFrequency = if (frequency > 0f) {
+                    if (detectedFrequency == 0f) frequency
+                    else detectedFrequency * 0.5f + frequency * 0.5f
+                } else {
+                    0f
                 }
             }
         }
-    }
+    )
 
     val controlPanel = @Composable { modifier: Modifier ->
         ControlPanel(

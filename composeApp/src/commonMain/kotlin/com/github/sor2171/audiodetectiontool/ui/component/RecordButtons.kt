@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -50,7 +51,8 @@ fun RecordButtons(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.height(80.dp), contentAlignment = Alignment.Center
+        modifier = modifier.height(80.dp).width(320.dp),
+        contentAlignment = Alignment.Center
     ) {
         AnimatedContent(
             targetState = isRecording, transitionSpec = {
@@ -71,7 +73,8 @@ fun RecordButtons(
                         animationSpec = tween(durationMillis = 300)
                     ) + fadeOut(animationSpec = tween(durationMillis = 300)))
                 }
-            }, label = "RecordButtonAnimation"
+            },
+            label = "RecordButtonAnimation"
         ) { recording ->
             if (recording) {
                 Row(
@@ -96,7 +99,7 @@ fun RecordButtons(
             } else {
                 Button(
                     onClick = onStartRecording,
-                    modifier = Modifier.fillMaxWidth(0.8f).height(64.dp),
+                    modifier = Modifier.fillMaxWidth(0.85f).height(64.dp),
                     shape = CircleShape
                 ) {
                     Icon(
