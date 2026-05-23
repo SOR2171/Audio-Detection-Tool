@@ -114,6 +114,10 @@ compose.desktop {
     application {
         mainClass = "com.github.sor2171.audiodetectiontool.MainKt"
 
+        buildTypes.release.proguard {
+            configurationFiles.from(project.file("proguard-rules.pro"))
+        }
+
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "com.github.sor2171.audiodetectiontool"
