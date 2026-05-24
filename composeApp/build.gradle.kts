@@ -83,7 +83,7 @@ configure<ApplicationExtension> {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
     }
     packaging {
         resources {
@@ -119,8 +119,15 @@ compose.desktop {
         }
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.github.sor2171.audiodetectiontool"
+            targetFormats(
+                TargetFormat.Msi,    // Windows
+                TargetFormat.Exe,    // Windows
+                TargetFormat.Dmg,    // macOS
+                TargetFormat.Pkg,    // macOS
+                TargetFormat.Deb,    // Linux
+                TargetFormat.Rpm     // Linux
+            )
+            packageName = "AudioDetectionTool"
             packageVersion = "1.0.0"
         }
     }
