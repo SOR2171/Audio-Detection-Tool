@@ -23,7 +23,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "AudioDetectionTool"
             isStatic = true
         }
     }
@@ -82,8 +82,8 @@ configure<ApplicationExtension> {
         applicationId = "com.github.sor2171.audiodetectiontool"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.1.0"
     }
     packaging {
         resources {
@@ -128,7 +128,7 @@ compose.desktop {
                 TargetFormat.Rpm     // Linux
             )
             packageName = "AudioDetectionTool"
-            packageVersion = "1.0.0"
+            packageVersion = "1.1.0"
         }
     }
 }

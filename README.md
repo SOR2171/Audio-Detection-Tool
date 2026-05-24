@@ -7,13 +7,13 @@
 This application aims to detect audio input from the user
 and provide analysis on pitch and other details.
 
-|   platform    |                    view                    |          note          |
-|:-------------:|:------------------------------------------:|:----------------------:|
-| JVM (Desktop) |     ![JVM View](./assets/jvm_view.png)     |     full features      |
-|    Android    | ![Android View](./assets/android_view.png) |     full features      |
-|      iOS      |     ![iOS View](./assets/ios_view.png)     |       not tested       |
-|     WASM      |    ![WASM View](./assets/wasm_view.png)    | existing front problem |
-|      Web      |     ![Web View](./assets/web_view.png)     | existing front problem |
+|   platform    |                    view                    |      note       |
+|:-------------:|:------------------------------------------:|:---------------:|
+| JVM (Desktop) |     ![JVM View](./assets/jvm_view.png)     | Fully supported |
+|    Android    | ![Android View](./assets/android_view.png) | Fully supported |
+|      iOS      |     ![iOS View](./assets/ios_view.png)     |   Not tested    |
+|     WASM      |    ![WASM View](./assets/wasm_view.png)    | Fully supported |
+|      Web      |     ![Web View](./assets/web_view.png)     | Fully supported |
 
 ## Features
 

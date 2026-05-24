@@ -28,8 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import audiodetectiontool.composeapp.generated.resources.Res
 import audiodetectiontool.composeapp.generated.resources.settings
@@ -64,6 +68,7 @@ fun SpectrumScreen(
     val analyzer = remember(bufferSize) { SpectrumAnalyzer(bufferSize) }
     val spectrumData by analyzer.spectrumState.collectAsState()
     val historyBuffer = remember { mutableStateListOf<List<Float>>() }
+    val textMeasurer = rememberTextMeasurer()
 
     var showSettingDialog by remember { mutableStateOf(false) }
     var historySize by remember { mutableStateOf(50) }
@@ -195,6 +200,37 @@ fun SpectrumScreen(
                     )
                 }
             }
+
+            // White separators for each octave
+            for (i in 0..7) {
+                val bIndex = 2 + 12 * i
+                val separatorY = size.height - (bIndex + 1) * binHeight
+                drawLine(
+                    color = Color.White,
+                    start = Offset(0f, separatorY),
+                    end = Offset(size.width, separatorY),
+                    strokeWidth = 1f
+                )
+            }
+
+            // C4 label
+            val c4Index = 39
+            val c4LineY = size.height - c4Index * binHeight
+            val c4LayoutResult = textMeasurer.measure(
+                text = "C4",
+                style = TextStyle(
+                    color = Color.White,
+                    fontSize = 12.sp,
+                    background = Color.Black.copy(alpha = 0.5f)
+                )
+            )
+            drawText(
+                textLayoutResult = c4LayoutResult,
+                topLeft = Offset(
+                    x = 4.dp.toPx(),
+                    y = c4LineY - c4LayoutResult.size.height
+                )
+            )
         }
     }
 }
