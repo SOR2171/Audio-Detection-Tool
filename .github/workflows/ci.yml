@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        target:
+          - android
+          - js
+          - wasm
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+
+      - run: chmod +x ./gradlew
+
+      - if: matrix.target == 'android'
+        uses: android-actions/setup-android@v3
+
+      - if: matrix.target == 'android'
+        run: ./gradlew composeApp:assembleDebug --no-daemon
+
+      - if: matrix.target == 'js'
+        run: ./gradlew composeApp:jsBrowserDistribution --no-daemon
+
+      - if: matrix.target == 'wasm'
+        run: ./gradlew composeApp:wasmJsBrowserDistribution --no-daemon
