@@ -1,0 +1,113 @@
+name: Build and Publish All Platforms
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: android
+          - os: ubuntu-latest
+            target: jvm
+          - os: ubuntu-latest
+            target: js
+          - os: ubuntu-latest
+            target: wasm
+          - os: macos-latest
+            target: ios
+          - os: macos-latest
+            target: desktop-macos
+          - os: windows-latest
+            target: desktop-windows
+          - os: ubuntu-latest
+            target: desktop-linux
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Set up Android SDK
+        if: matrix.target == 'android'
+        uses: android-actions/setup-android@v3
+
+      - name: Build Android
+        if: matrix.target == 'android'
+        run: ./gradlew composeApp:assembleRelease --no-daemon
+
+      - name: Build JVM Desktop
+        if: matrix.target == 'jvm'
+        run: ./gradlew composeApp:packageRelease --no-daemon
+
+      - name: Build JavaScript
+        if: matrix.target == 'js'
+        run: ./gradlew composeApp:jsBrowserDistribution --no-daemon
+
+      - name: Build WebAssembly
+        if: matrix.target == 'wasm'
+        run: ./gradlew composeApp:wasmJsBrowserDistribution --no-daemon
+
+      - name: Build iOS Framework
+        if: matrix.target == 'ios'
+        run: ./gradlew composeApp:assembleReleaseXCFramework --no-daemon
+
+      - name: Build macOS Desktop
+        if: matrix.target == 'desktop-macos'
+        run: ./gradlew composeApp:packageRelease --no-daemon
+
+      - name: Build Windows Desktop
+        if: matrix.target == 'desktop-windows'
+        run: ./gradlew composeApp:packageMsi --no-daemon
+
+      - name: Build Linux Desktop
+        if: matrix.target == 'desktop-linux'
+        run: ./gradlew composeApp:packageDeb --no-daemon
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target }}-artifacts
+          path: |
+            composeApp/build/outputs/**/*.apk
+            composeApp/build/outputs/**/*.aab
+            composeApp/build/compose/binaries/**
+            composeApp/build/distributions/**
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: artifacts/**/*
+          draft: false
+          prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -7,35 +7,35 @@ import kotlin.math.max
 import kotlin.math.roundToInt
 
 object NoteNameFormatter {
-    fun getNoteData(frequency: Float, base: Float, style: NoteNameStyle): NoteData {
+    fun getNoteData(frequency: Number, base: Number, style: NoteNameStyle): NoteData<Float> {
+        val frequencyFloat = frequency.toFloat()
+        val baseFloat = base.toFloat()
+
         return when (style) {
-            NoteNameStyle.Scientific -> convertToScientific(frequency, base)
-            NoteNameStyle.Helmholtz -> convertToHelmholtz(frequency, base)
-            NoteNameStyle.Solfege -> convertToSolfege(frequency, base)
+            NoteNameStyle.Scientific -> convertToScientific(frequencyFloat, baseFloat)
+            NoteNameStyle.Helmholtz -> convertToHelmholtz(frequencyFloat, baseFloat)
+            NoteNameStyle.Solfege -> convertToSolfege(frequencyFloat, baseFloat)
         }
     }
 
-    fun getNoteData(frequency: Float, base: Int, style: NoteNameStyle): NoteData {
-        return getNoteData(frequency, base.toFloat(), style)
-    }
 
-    private fun getCalculatedData(frequency: Float, base: Float): Triple<Int, Int, Int> {
+    private fun getCalculatedData(frequency: Float, base: Float): Triple<Int, Int, Float> {
         val semitonesFromA4 = 12 * log2(frequency / base)
         val midiNoteFloat = semitonesFromA4 + 69
         val midiNote = midiNoteFloat.roundToInt()
-        val cent = ((midiNoteFloat - midiNote) * 100).roundToInt()
+        val cent = (midiNoteFloat - midiNote) * 100
 
         val noteIndex = (midiNote % 12).let { if (it < 0) it + 12 else it }
         val octave = (midiNote / 12) - 1
         return Triple(noteIndex, octave, cent)
     }
 
-    private fun convertToScientific(frequency: Float, base: Float): NoteData {
+    private fun convertToScientific(frequency: Float, base: Float): NoteData<Float> {
         val (noteIndex, octave, cent) = getCalculatedData(frequency, base)
         return NoteData("${Const.noteNamesSharp[noteIndex]}$octave", cent)
     }
 
-    private fun convertToHelmholtz(frequency: Float, base: Float): NoteData {
+    private fun convertToHelmholtz(frequency: Float, base: Float): NoteData<Float> {
         val (noteIndex, octave, cent) = getCalculatedData(frequency, base)
         val noteName = Const.noteNamesSharp[noteIndex]
 
@@ -54,7 +54,7 @@ object NoteNameFormatter {
         return NoteData(name, cent)
     }
 
-    private fun convertToSolfege(frequency: Float, base: Float): NoteData {
+    private fun convertToSolfege(frequency: Float, base: Float): NoteData<Float> {
         val (noteIndex, _, cent) = getCalculatedData(frequency, base)
         return NoteData(Const.solfegeNames[noteIndex], cent)
     }

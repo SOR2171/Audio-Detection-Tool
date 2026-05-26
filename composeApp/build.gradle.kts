@@ -3,6 +3,8 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
+val appVersion = "1.1.1"
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
@@ -83,7 +85,7 @@ configure<ApplicationExtension> {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 2
-        versionName = "1.1.0"
+        versionName = versionName
     }
     packaging {
         resources {
@@ -128,7 +130,7 @@ compose.desktop {
                 TargetFormat.Rpm     // Linux
             )
             packageName = "AudioDetectionTool"
-            packageVersion = "1.1.0"
+            packageVersion = appVersion
         }
     }
 }

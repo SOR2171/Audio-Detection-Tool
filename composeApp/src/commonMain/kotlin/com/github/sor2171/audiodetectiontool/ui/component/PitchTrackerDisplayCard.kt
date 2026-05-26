@@ -28,15 +28,17 @@ import audiodetectiontool.composeapp.generated.resources.Res
 import audiodetectiontool.composeapp.generated.resources.cent
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
+import kotlin.math.round
 
 @Composable
 fun PitchTrackerDisplayCard(
     noteName: String,
-    cents: Int,
+    cents: Float,
+    hz: Float,
     modifier: Modifier = Modifier
 ) {
     val animatedCents by animateFloatAsState(
-        targetValue = cents.toFloat(),
+        targetValue = cents,
         label = "CentsAnimation"
     )
 
@@ -126,10 +128,22 @@ fun PitchTrackerDisplayCard(
                 )
             }
 
-            Text(
-                text = (if (cents > 0) "+" else "") + "$cents ${stringResource(Res.string.cent)}",
-                style = textStyle.bodyLarge.copy(color = colorScheme.onSurfaceVariant)
-            )
+            Column(
+                modifier = Modifier,
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = (if (cents > 0) "+" else "")
+                            + "${round(cents * 100) / 100} ${stringResource(Res.string.cent)}",
+                    style = textStyle.bodyLarge.copy(color = colorScheme.onSurfaceVariant)
+                )
+
+                Text(
+                    text = "${round(hz * 100) / 100} Hz",
+                    style = textStyle.bodyLarge.copy(color = colorScheme.onSurfaceVariant)
+                )
+            }
         }
     }
 }
@@ -143,9 +157,9 @@ private fun PitchTrackerDisplayCardPreview() {
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            PitchTrackerDisplayCard(noteName = "A4", cents = 0)
-            PitchTrackerDisplayCard(noteName = "A#4", cents = 15)
-            PitchTrackerDisplayCard(noteName = "G4", cents = -35)
+            PitchTrackerDisplayCard(noteName = "A4", cents = 0.0f, hz = 440f)
+            PitchTrackerDisplayCard(noteName = "A#4", cents = 15.0f, hz = 466.16f)
+            PitchTrackerDisplayCard(noteName = "G4", cents = -35.0f, hz = 392f)
         }
     }
 }

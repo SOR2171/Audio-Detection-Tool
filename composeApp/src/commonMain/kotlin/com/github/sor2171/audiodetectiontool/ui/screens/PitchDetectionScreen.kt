@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,7 +24,6 @@ import com.github.sor2171.audiodetectiontool.core.entity.NoteData
 import com.github.sor2171.audiodetectiontool.core.entity.NoteNameStyle
 import com.github.sor2171.audiodetectiontool.core.service.PitchDetector
 import com.github.sor2171.audiodetectiontool.core.utils.NoteNameFormatter
-import com.github.sor2171.audiodetectiontool.core.utils.toAudioWindows
 import com.github.sor2171.audiodetectiontool.getPlatform
 import com.github.sor2171.audiodetectiontool.ui.component.PitchTrackerDisplayCard
 import com.github.sor2171.audiodetectiontool.ui.component.RecordButtons
@@ -33,10 +31,8 @@ import com.github.sor2171.audiodetectiontool.ui.component.RecorderController
 import com.github.sor2171.audiodetectiontool.ui.component.SettingCard
 import com.github.sor2171.audiodetectiontool.ui.theme.AppTheme
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import space.kodio.core.AudioQuality
-import space.kodio.core.Kodio
 
 @Composable
 fun PitchTrackerScreen(
@@ -203,11 +199,12 @@ private fun DisplayPanel(
             detectedFrequency,
             a4Frequency,
             noteStyle
-        ) else NoteData("--", 0)
+        ) else NoteData("--", 0.0f)
 
     PitchTrackerDisplayCard(
         noteName = noteName,
         cents = cents,
+        hz = detectedFrequency,
         modifier = modifier
     )
 }
