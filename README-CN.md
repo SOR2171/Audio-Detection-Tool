@@ -6,13 +6,15 @@
 
 这个应用程序旨在检测用户的音频输入，并提供关于音高和其他细节的分析。
 
-|      平台       |                     预览                     |  备注  |
-|:-------------:|:------------------------------------------:|:----:|
-| JVM (Desktop) |     ![JVM View](./assets/jvm_view.png)     | 功能完整 |
-|    Android    | ![Android View](./assets/android_view.png) | 功能完整 |
-|      iOS      |     ![iOS View](./assets/ios_view.png)     | 未测试  |
-|     WASM      |    ![WASM View](./assets/wasm_view.png)    | 功能完整 |
-|      Web      |     ![Web View](./assets/web_view.png)     | 功能完整 |
+[在线试用WASM](https://SOR2171.github.io/AudioDetectionTool/)
+
+|      平台       |    备注     |
+|:-------------:|:---------:|
+| JVM (Desktop) |   功能完整    |
+|    Android    |   功能完整    |
+|      iOS      |  未测试，无发布  |
+|     WASM      |   功能完整    |
+|      Web      |   功能完整    |
 
 ## 功能
 
