@@ -7,13 +7,15 @@
 This application aims to detect audio input from the user
 and provide analysis on pitch and other details.
 
-|   platform    |                    view                    |      note       |
-|:-------------:|:------------------------------------------:|:---------------:|
-| JVM (Desktop) |     ![JVM View](./assets/jvm_view.png)     | Fully supported |
-|    Android    | ![Android View](./assets/android_view.png) | Fully supported |
-|      iOS      |     ![iOS View](./assets/ios_view.png)     |   Not tested    |
-|     WASM      |    ![WASM View](./assets/wasm_view.png)    | Fully supported |
-|      Web      |     ![Web View](./assets/web_view.png)     | Fully supported |
+[Online Demo For WASM](https://SOR2171.github.io/AudioDetectionTool/)
+
+|   platform    |          note          |
+|:-------------:|:----------------------:|
+| JVM (Desktop) |    Fully supported     |
+|    Android    |    Fully supported     |
+|      iOS      | Not tested, No Release |
+|     WASM      |    Fully supported     |
+|      Web      |    Fully supported     |
 
 ## Features
 

@@ -3,7 +3,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
-val appVersion = "1.1.1"
+val appVersion = "1.1.2"
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -59,6 +59,10 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.material.icons.extended)
 
+            // https://github.com/vinceglb/FileKit
+            implementation(libs.filekit.compose)
+            // https://github.com/arthenica/ffmpeg-kit
+//            implementation(libs.ffmpeg.kit.min)
             // https://github.com/dosier/kodio
             implementation(libs.kodio.core)
             // https://kotlin.github.io/multik/
@@ -131,6 +135,18 @@ compose.desktop {
             )
             packageName = "AudioDetectionTool"
             packageVersion = appVersion
+
+            windows {
+                iconFile.set(project.file("icons/icon.ico"))
+            }
+
+            macOS {
+                iconFile.set(project.file("icons/icon.icns"))
+            }
+
+            linux {
+                iconFile.set(project.file("icons/icon.png"))
+            }
         }
     }
 }

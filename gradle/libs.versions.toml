@@ -11,6 +11,8 @@ androidx-lifecycle = "2.10.0"
 androidx-testExt = "1.3.0"
 composeHotReload = "1.1.1"
 composeMultiplatform = "1.10.3"
+ffmpegKitMin = "6.0"
+filekitCompose = "0.8.8"
 kodio-core = "0.1.5"
 junit = "4.13.2"
 kotlin = "2.3.21"
@@ -21,6 +23,8 @@ multik = "0.3.1"
 slf4j = "2.0.18"
 
 [libraries]
+ffmpeg-kit-min = { module = "com.arthenica:ffmpeg-kit-min", version.ref = "ffmpegKitMin" }
+filekit-compose = { module = "io.github.vinceglb:filekit-compose", version.ref = "filekitCompose" }
 kodio-core = { module = "space.kodio:core", version.ref = "kodio-core" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
