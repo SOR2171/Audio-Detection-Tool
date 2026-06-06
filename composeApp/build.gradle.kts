@@ -33,7 +33,11 @@ kotlin {
     jvm()
 
     js {
-        browser()
+        browser {
+            commonWebpackConfig {
+                sourceMaps = false
+            }
+        }
         binaries.executable()
     }
 

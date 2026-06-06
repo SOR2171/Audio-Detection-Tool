@@ -8,13 +8,13 @@
 
 [在线试用WASM](https://SOR2171.github.io/AudioDetectionTool/)
 
-|      平台       |    备注     |
-|:-------------:|:---------:|
-| JVM (Desktop) |   功能完整    |
-|    Android    |   功能完整    |
-|      iOS      |  未测试，无发布  |
-|     WASM      |   功能完整    |
-|      Web      |   功能完整    |
+|      平台       |      备注       |
+|:-------------:|:-------------:|
+| JVM (Desktop) |     功能完整      |
+|    Android    |     功能完整      |
+|      iOS      | 未测试，<br/>无发布  |
+|     WASM      |     功能完整      |
+|      JS       | 功能完整，<br/>无发布 |
 
 ## 功能
 

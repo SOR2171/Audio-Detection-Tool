@@ -9,13 +9,13 @@ and provide analysis on pitch and other details.
 
 [Online Demo For WASM](https://SOR2171.github.io/AudioDetectionTool/)
 
-|   platform    |          note          |
-|:-------------:|:----------------------:|
-| JVM (Desktop) |    Fully supported     |
-|    Android    |    Fully supported     |
-|      iOS      | Not tested, No Release |
-|     WASM      |    Fully supported     |
-|      Web      |    Fully supported     |
+|   platform    |              note               |
+|:-------------:|:-------------------------------:|
+| JVM (Desktop) |         Fully supported         |
+|    Android    |         Fully supported         |
+|      iOS      |   Not tested,<br/>No Release    |
+|     WASM      |         Fully supported         |
+|      JS       | Fully supported,<br/>No Release |
 
 ## Features
 

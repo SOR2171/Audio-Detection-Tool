@@ -22,8 +22,8 @@ jobs:
           - os: ubuntu-latest
             target: android
 
-          - os: ubuntu-latest
-            target: js
+#          - os: ubuntu-latest
+#            target: js
 
           - os: ubuntu-latest
             target: wasm
