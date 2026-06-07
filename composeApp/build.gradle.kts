@@ -4,6 +4,8 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 val appVersion = "1.1.2"
+val appName = "AudioDetectionTool"
+val packageName = "com.github.sor2171.audiodetectiontool"
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -25,7 +27,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "AudioDetectionTool"
+            baseName = appName
             isStatic = true
         }
     }
@@ -85,11 +87,11 @@ kotlin {
 }
 
 configure<ApplicationExtension> {
-    namespace = "com.github.sor2171.audiodetectiontool"
+    namespace = packageName
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.github.sor2171.audiodetectiontool"
+        applicationId = packageName
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 2
@@ -116,13 +118,24 @@ configure<ApplicationExtension> {
     }
 }
 
+@Suppress("UnstableApiUsage")
+androidComponents {
+    onVariants { variant ->
+        variant.outputs.forEach { output ->
+            output.outputFileName.set(
+                "$appName-$appVersion.apk"
+            )
+        }
+    }
+}
+
 dependencies {
     debugImplementation(libs.compose.uiTooling)
 }
 
 compose.desktop {
     application {
-        mainClass = "com.github.sor2171.audiodetectiontool.MainKt"
+        mainClass = "$packageName.MainKt"
 
         buildTypes.release.proguard {
             configurationFiles.from(project.file("proguard-rules.pro"))
@@ -137,7 +150,7 @@ compose.desktop {
                 TargetFormat.Deb,    // Linux
                 TargetFormat.Rpm     // Linux
             )
-            packageName = "AudioDetectionTool"
+            packageName = appName
             packageVersion = appVersion
 
             windows {
