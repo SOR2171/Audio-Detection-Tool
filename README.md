@@ -7,7 +7,7 @@
 This application aims to detect audio input from the user
 and provide analysis on pitch and other details.
 
-[Online Demo For WASM](https://SOR2171.github.io/AudioDetectionTool/)
+[Online Demo For WASM](https://SOR2171.github.io/Audio-Detection-Tool/)
 
 |   platform    |              note               |
 |:-------------:|:-------------------------------:|

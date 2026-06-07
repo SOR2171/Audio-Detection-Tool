@@ -6,7 +6,7 @@
 
 这个应用程序旨在检测用户的音频输入，并提供关于音高和其他细节的分析。
 
-[在线试用WASM](https://SOR2171.github.io/AudioDetectionTool/)
+[在线试用WASM](https://SOR2171.github.io/Audio-Detection-Tool/)
 
 |      平台       |      备注       |
 |:-------------:|:-------------:|
