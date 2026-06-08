@@ -69,7 +69,12 @@ jobs:
         uses: android-actions/setup-android@v3
 
       # Android
-      - if: matrix.target == 'android'
+      - name: Decode Android Keystore
+        if: matrix.target == 'android'
+        run: echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 -d > release.jks
+
+      - name: Build Android Release
+        if: matrix.target == 'android'
         run: ./gradlew composeApp:assembleRelease --no-daemon
 
       # JS
@@ -155,3 +160,6 @@ jobs:
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}

@@ -2,10 +2,18 @@ import com.android.build.api.dsl.ApplicationExtension
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 val appVersion = "1.1.2"
 val appName = "AudioDetectionTool"
 val packageName = "com.github.sor2171.audiodetectiontool"
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        file.inputStream().use { load(it) }
+    }
+}
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -94,16 +102,43 @@ configure<ApplicationExtension> {
         applicationId = packageName
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 2
-        versionName = versionName
+        versionCode = appVersion.split(".").joinToString("").toInt()
+        versionName = appVersion
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include(
+                "armeabi-v7a",
+                "arm64-v8a",
+                "x86_64"
+            )
+            isUniversalApk = true
+        }
+    }
+    signingConfigs {
+        create("release") {
+            storeFile = file(
+                localProperties.getProperty("KEYSTORE_FILE")
+                    ?: "${rootDir}/release.jks"
+            )
+            storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                ?: localProperties.getProperty("ANDROID_KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("ANDROID_KEY_ALIAS")
+                ?: localProperties.getProperty("ANDROID_KEY_ALIAS")
+            keyPassword = System.getenv("ANDROID_KEY_PASSWORD")
+                ?: localProperties.getProperty("ANDROID_KEY_PASSWORD")
+        }
+    }
     buildTypes {
         getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -122,9 +157,11 @@ configure<ApplicationExtension> {
 androidComponents {
     onVariants { variant ->
         variant.outputs.forEach { output ->
-            output.outputFileName.set(
-                "$appName-$appVersion.apk"
-            )
+            val abi = output.filters
+                .find { it.filterType.name == "ABI" }
+                ?.identifier
+                ?: "universal"
+            output.outputFileName.set("$appName-$appVersion-$abi.apk")
         }
     }
 }
